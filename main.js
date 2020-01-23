@@ -5,7 +5,41 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
-const url = require('url')
+// const url = require('url')
+var express = require('express');
+var serverApp = express();
+var http = require('http').createServer(serverApp);
+var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+
+
+serverApp.use(bodyParser.json());
+serverApp.use(express.static(path.join(__dirname, 'build')))
+
+serverApp.get('/test', function (req, res) {
+  res.send(require('fs').readdirSync(__dirname));
+});
+
+io.on('connection', function (socket) {
+  socket.broadcast.emit('USER_CONNECTED');
+
+  socket.on('CHAT_MESSAGE', function (data) {
+    io.emit('CHAT_MESSAGE', data);
+  });
+
+  socket.on('SHARE_MESSAGE_HISTORY', function (data) {
+    io.emit('MESSAGE_HISTORY', data);
+  });
+
+  socket.on('disconnect', function () {
+    socket.broadcast.emit('USER_DISCONNECTED');
+  });
+});
+
+http.listen(3001, function () {
+  console.log('listening on *:3001');
+});
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,14 +50,15 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  // mainWindow.loadURL(url.format({
+  //   pathname: path.join(__dirname, 'index.html'),
+  //   protocol: 'file:',
+  //   slashes: true
+  // }))
+  mainWindow.loadURL('http://localhost:3001/')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
