@@ -12,13 +12,24 @@ var http = require('http').createServer(serverApp);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 
+const { 
+  DEV,
+} = process.env;
 
 serverApp.use(bodyParser.json());
-serverApp.use(express.static(path.join(__dirname, 'build')))
+if (!DEV) {
+  serverApp.use(express.static(path.join(__dirname, 'build')));
+}
 
 serverApp.get('/test', function (req, res) {
   res.send(require('fs').readdirSync(__dirname));
 });
+
+if (DEV) {
+  serverApp.get('*', (req, res) => {
+    res.redirect(`http://localhost:3000/${req.originalUrl}`);
+  })
+}
 
 io.on('connection', function (socket) {
   socket.broadcast.emit('USER_CONNECTED');

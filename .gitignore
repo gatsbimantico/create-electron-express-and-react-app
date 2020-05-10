@@ -2,3 +2,5 @@ electron-quick-start-*
 node_modules
 build
 yarn.lock
+
+out/

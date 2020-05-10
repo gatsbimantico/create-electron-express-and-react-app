@@ -4,14 +4,17 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "package": "node packager.js",
-    "start": "npm-run-all --parallel start:*",
-    "start:electron": "electron . ",
-    "start:react": "react-scripts start",
-    "build": "yarn build:react && yarn package",
     "build:react": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npm-run-all build:react package",
+    "bump": "node yarn_bump_versions.js",
+    "dev": "cross-env DEV=1 npm-run-all --parallel start:*",
+    "eject": "react-scripts eject",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    "start:electron": "electron-forge start",
+    "start:react": "react-scripts start",
+    "start": "npm-run-all --parallel start:*",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -27,21 +30,27 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^2.0.0",
-    "electron-packager": "^12.0.2",
-    "electron-rebuild": "^1.7.3",
+    "@electron-forge/cli": "6.0.0-beta.51",
+    "@electron-forge/maker-deb": "6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.51",
+    "@electron-forge/maker-zip": "6.0.0-beta.51",
+    "cross-env": "^7.0.2",
+    "cross-spawn": "^7.0.2",
+    "electron": "^8.2.5",
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/react": "^10.0.4",
+    "@testing-library/user-event": "^10.1.2",
     "body-parser": "^1.19.0",
+    "electron-squirrel-startup": "^1.0.0",
     "express": "^4.17.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0",
-    "socket.io": "^2.2.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1",
+    "socket.io": "^2.3.0"
   },
   "browserslist": {
     "production": [
@@ -54,5 +63,32 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "create_electron_express_and_react_app"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }
