@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "build:react": "react-scripts build",
-    "build": "npm-run-all build:react package",
-    "bump": "node yarn_bump_versions.js",
+    "build": "npm-run-all build:react make",
+    "bump": "node bump_versions.js",
     "dev": "cross-env DEV=1 npm-run-all --parallel start:*",
     "eject": "react-scripts eject",
     "make": "electron-forge make",

@@ -1,6 +1,10 @@
-electron-quick-start-*
+# Folders
+.devcontainer
 node_modules
 build
-yarn.lock
+out
 
-out/
+# Files
+electron-quick-start-*
+yarn.lock
+package-lock.json
