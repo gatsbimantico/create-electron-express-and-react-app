@@ -8,3 +8,7 @@ out
 electron-quick-start-*
 yarn.lock
 package-lock.json
+.shelljsrc
+
+# Extensions
+*.log
