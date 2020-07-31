@@ -21,13 +21,19 @@ if (!DEV) {
   serverApp.use(express.static(path.join(__dirname, 'build')));
 }
 
+serverApp.get('/hello', (req, res) => res.json({
+  ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+  p2p: true,
+}));
+
 serverApp.get('/test', function (req, res) {
-  res.send(require('fs').readdirSync(__dirname));
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  res.send(ip);
 });
 
 if (DEV) {
   serverApp.get('*', (req, res) => {
-    res.redirect(`http://localhost:3000/${req.originalUrl}`);
+    res.redirect(`http://localhost:3000${req.originalUrl}`);
   })
 }
 
