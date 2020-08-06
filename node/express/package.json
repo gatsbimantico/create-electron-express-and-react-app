@@ -1,0 +1,56 @@
+{
+  "name": "express-app",
+  "version": "1.0.0",
+  "description": "A modular Express application",
+  "main": "index.js",
+  "scripts": {
+    "node:express": "node ./main.js",
+    "package": "electron-forge package",
+    "start:electron": "electron-forge start",
+    "start:react": "react-scripts start",
+    "start": "npm-run-all --parallel start:*",
+    "test": "react-scripts test"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Cesar Costas Carrera",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "cross-env": "^7.0.2"
+  },
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cross-fetch": "^3.0.5",
+    "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "lodash.merge": "^4.6.2",
+    "public-ip": "^4.0.1",
+    "qrcode": "^1.4.4",
+    "shelljs": "^0.8.4",
+    "speakeasy": "^2.0.0",
+    "uuid": "^8.3.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
