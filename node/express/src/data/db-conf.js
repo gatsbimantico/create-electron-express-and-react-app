@@ -6,8 +6,6 @@ module.exports = (DB) => {
   DB.init[DB.CONF] = {
     'F2A.name': `f2a-${uuid()}`,
     'server.security.publicPaths': [
-      '/',
-      '/login',
       '/api/login'
     ],
     'server.env.dev.active': false,

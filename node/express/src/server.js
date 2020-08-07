@@ -32,11 +32,12 @@ function ExpressServer() {
   }) {
     app.use(bodyParser.json());
     app.use(cookieParser());
-    app.use(require('./services/security.js').middleware(catchErrors, publicPaths));
 
     if (!isDevEnv) {
       app.use(express.static(path.join(__dirname, '../../../build')));
     }
+
+    app.use(require('./services/security.js').middleware(catchErrors, publicPaths));
 
     return this;
   }

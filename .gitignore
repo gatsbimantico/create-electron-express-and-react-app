@@ -12,3 +12,4 @@ package-lock.json
 
 # Extensions
 *.log
+.db.*.json
