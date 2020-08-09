@@ -62,11 +62,7 @@ async function logIn(req, res) {
     if (isCandidate) delete candidates[reqId];
 
     if (!user.current.OTP) {
-      const {
-        'otp.name': otpName,
-      } = DB.get(DB.CONF);
-      
-      const { secret, otpUrl } = OTP.generateSecret({ label: otpName });
+      const { secret, otpUrl } = OTP.generateSecret();
       user.current.OTP = secret;
       user.save();
       MSG(res).SETUP_OTP(await QR.generateDataUrl(otpUrl));
