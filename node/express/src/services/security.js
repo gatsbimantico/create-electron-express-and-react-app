@@ -41,7 +41,7 @@ class SecurityService {
     return nodeId;
   }
 
-  middleware(catchServiceErrors = (a,b,c) => c(), publicPaths = []) {
+  middleware(catchServiceErrors = (a,b,c) => c(), { publicPaths = [] }) {
     return catchServiceErrors((req, res, next) => {
       const oldNodeId = req.cookies[this.gde];
       const isCandidate = state.candidates[oldNodeId];

@@ -25,10 +25,13 @@ function catchErrors(callback, errors) {
 function ExpressServer() {
   const app = express();
   const server = http.createServer(app);
+  const routes = glob.sync(path.join(__dirname, './server-routes/*.js'))
+    .map((file) => require(path.resolve(file)));
 
   function bootServer({
     'server.env.dev.active': isDevEnv,
     'server.security.publicPaths': publicPaths,
+    'server.security.permitPaths': permitPaths,
   }) {
     app.use(bodyParser.json());
     app.use(cookieParser());
@@ -37,16 +40,20 @@ function ExpressServer() {
       app.use(express.static(path.join(__dirname, '../../../build')));
     }
 
-    app.use(require('./services/security.js').middleware(catchErrors, publicPaths));
+    app.use(require('./services/security.js').middleware(
+      catchErrors,
+      routes.reduce((all, route) => ({
+        permitPaths: all.permitPaths.concat(route.permitPaths || []),
+        publicPaths: all.publicPaths.concat(route.publicPaths || []),
+       }), { permitPaths, publicPaths }),
+    ));
 
     return this;
   }
 
   function configureServer() {
     const errorStates = {};
-    glob.sync(path.join(__dirname, './server-routes/*.js'))
-      .map((file) => require(path.resolve(file)))
-      .forEach((configurator) => {
+    routes.forEach(({ configurator }) => {
         configurator({
           get(route, ...handlers) {
             app.get(route, ...handlers.map(fn => catchErrors(fn, errorStates)));

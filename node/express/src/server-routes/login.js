@@ -100,7 +100,21 @@ function logOut(req, res) {
   MSG(res).LOGOUT_SUCCESS();
 }
 
-module.exports = function UserLogger(app) {
-  app.get('/api/login', logIn);
-  app.get('/api/logout', logOut);
+const PATHS = {
+  LOGIN: '/api/login',
+  LOGOUT: '/api/logout',
 };
+
+module.exports.PATHS = PATHS;
+
+module.exports.configurator = function UserLogger(app) {
+  app.get(PATHS.LOGIN, logIn);
+  app.get(PATHS.LOGOUT, logOut);
+};
+
+module.exports.publicPaths = [
+  PATHS.LOGIN,
+];
+
+module.exports.permitPaths = [
+];
