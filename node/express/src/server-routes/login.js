@@ -1,6 +1,6 @@
 const vendor = require('../utils/vendor.js');
-const QR = vendor('qr-tool');
-const F2A = vendor('f2a-tool');
+const QR = vendor('../utils/qr-tool.js');
+const OTP = vendor('../utils/otp-tool.js');
 const DB = require('../data/db.js');
 
 const MSG = (res) => ({
@@ -8,9 +8,9 @@ const MSG = (res) => ({
     status: 200,
     msg: 'Login successful',
   }),
-  SETUP_F2A: (imgSrc) => res.status(201).send({
+  SETUP_OTP: (imgSrc) => res.status(201).send({
     status: 201,
-    msg: 'User approved, use the following QR to setup your F2A',
+    msg: 'User approved, use the following QR to setup your One Time Password',
     imgSrc,
   }),
   CONTACT_FOR_APPROVAL: () => res.status(202).send({
@@ -46,7 +46,7 @@ function User(username) {
 
 async function logIn(req, res) {
   const auth = (req.header('Authorization') || '').replace(/^Basic /, '');
-  const [username, f2aToken] = Buffer.from(auth, "base64").toString("utf8").split(':');
+  const [username, otpToken] = Buffer.from(auth, "base64").toString("utf8").split(':');
   const user = User(username);
 
   if (user.current) {
@@ -61,19 +61,19 @@ async function logIn(req, res) {
     nodes[reqId] = currentNode;
     if (isCandidate) delete candidates[reqId];
 
-    if (!user.current.F2A) {
+    if (!user.current.OTP) {
       const {
-        'F2A.name': f2aName,
+        'otp.name': otpName,
       } = DB.get(DB.CONF);
       
-      const { secret, otpUrl } = F2A.generateSecret({ name: f2aName });
-      user.current.F2A = secret;
+      const { secret, otpUrl } = OTP.generateSecret({ label: otpName });
+      user.current.OTP = secret;
       user.save();
-      MSG(res).SETUP_F2A(await QR.generateDataUrl(otpUrl));
+      MSG(res).SETUP_OTP(await QR.generateDataUrl(otpUrl));
     } else {
-      const isCodeValid = await F2A.validateToken(
-        user.current.F2A,
-        f2aToken,
+      const isCodeValid = await OTP.validateToken(
+        user.current.OTP,
+        otpToken,
       );
       nodes[reqId].auth = isCodeValid;
 
