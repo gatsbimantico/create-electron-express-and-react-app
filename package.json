@@ -15,7 +15,7 @@
     "node:express": "node ./node/express/main.js",
     "package": "electron-forge package",
     "start:electron": "electron-forge start",
-    "start:react": "react-scripts start",
+    "start:react": "cross-env BROWSER=none react-scripts start",
     "start": "npm-run-all --parallel start:*",
     "test": "react-scripts test"
   },
@@ -38,11 +38,21 @@
     "@electron-forge/maker-rpm": "6.0.0-beta.51",
     "@electron-forge/maker-squirrel": "6.0.0-beta.51",
     "@electron-forge/maker-zip": "6.0.0-beta.51",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
+    "cross-fetch": "^3.0.5",
     "cross-spawn": "^7.0.2",
     "electron": "^8.2.5",
-    "npm-run-all": "^4.1.5"
+    "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "lodash.merge": "^4.6.2",
+    "npm-run-all": "^4.1.5",
+    "path": "^0.12.7",
+    "qrcode": "^1.4.4",
+    "speakeasy": "^2.0.0",
+    "uuid": "^8.3.0"
   },
   "dependencies": {
     "@emotion/core": "^10.0.28",
@@ -51,22 +61,13 @@
     "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.1.2",
     "abort-controller": "^3.0.0",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
-    "cross-fetch": "^3.0.5",
     "electron-squirrel-startup": "^1.0.0",
-    "express": "^4.17.1",
-    "glob": "^7.1.6",
-    "lodash.merge": "^4.6.2",
     "public-ip": "^4.0.1",
-    "qrcode": "^1.4.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
     "shelljs": "^0.8.4",
-    "socket.io": "^2.3.0",
-    "speakeasy": "^2.0.0",
-    "uuid": "^8.3.0"
+    "socket.io": "^2.3.0"
   },
   "optionalDependencies": {
     "@testing-library/dom": "^7.17.0"

@@ -6,6 +6,10 @@ const glob = vendor('glob');
 const bodyParser = vendor('body-parser');
 const cookieParser = vendor('cookie-parser');
 
+const { 
+  DEV,
+} = process.env;
+
 function catchErrors(callback, errors) {
   return (req, res, ...args) => {
     try {
@@ -28,6 +32,9 @@ function ExpressServer() {
   const routes = glob.sync(path.join(__dirname, './server-routes/*.js'))
     .map((file) => require(path.resolve(file)));
 
+  this.app = app;
+  this.server = server;
+
   function bootServer({
     'server.env.dev.active': isDevEnv,
     'server.security.publicPaths': publicPaths,
@@ -36,16 +43,17 @@ function ExpressServer() {
     app.use(bodyParser.json());
     app.use(cookieParser());
 
-    if (!isDevEnv) {
+    if (!isDevEnv && !DEV) {
       app.use(express.static(path.join(__dirname, '../../../build')));
     }
 
     app.use(require('./services/security.js').middleware(
       catchErrors,
       routes.reduce((all, route) => ({
+        allPaths: all.allPaths.concat(route.PATHS || []),
         permitPaths: all.permitPaths.concat(route.permitPaths || []),
         publicPaths: all.publicPaths.concat(route.publicPaths || []),
-       }), { permitPaths, publicPaths }),
+       }), { allPaths: [], permitPaths, publicPaths }),
     ));
 
     return this;
@@ -78,7 +86,7 @@ function ExpressServer() {
     'server.env.dev.endpoint': devEnvEndpoint,
     'server.port': port,
   }) {
-    if (isDevEnv) {
+    if (isDevEnv || DEV) {
       app.get('*', function redirectToLocalhost(req, res) {
         res.redirect(`${devEnvEndpoint}${req.originalUrl}`);
       });

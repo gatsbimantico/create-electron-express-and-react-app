@@ -41,11 +41,19 @@ class SecurityService {
     return nodeId;
   }
 
-  middleware(catchServiceErrors = (a,b,c) => c(), { publicPaths = [] }) {
+  middleware(
+    catchServiceErrors = (a,b,c) => c(),
+    {
+      allPaths = [],
+      publicPaths = [],
+    },
+  ) {
     return catchServiceErrors((req, res, next) => {
       const oldNodeId = req.cookies[this.gde];
       const isCandidate = state.candidates[oldNodeId];
-      const isPublicPath = publicPaths.includes(req.url.replace(/(.)\/$/,'$1'));
+      const cleanUrl = req.url.replace(/(.)\/$/,'$1');
+      const isPublicPath = publicPaths.includes(cleanUrl);
+      const isKnownPath = allPaths.includes(cleanUrl);
 
       if (oldNodeId && !isCandidate) {
         req.netNodes = {
@@ -66,7 +74,7 @@ class SecurityService {
         };
       }
 
-      if (!req.netNodes.isPublicPath) {
+      if (isKnownPath && !req.netNodes.isPublicPath) {
         if (req.netNodes.isCandidate) {
           throw new Error(ERROR.IS_CANDIDATE);
         } else if (req.netNodes.currentNode.auth !== true) {
