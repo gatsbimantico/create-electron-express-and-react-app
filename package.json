@@ -1,5 +1,5 @@
 {
-  "name": "create-electron-express-and-react-app",
+  "name": "my-net",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
@@ -51,7 +51,8 @@
     "path": "^0.12.7",
     "qrcode": "^1.4.4",
     "speakeasy": "^2.0.0",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "worker-loader": "^3.0.2"
   },
   "dependencies": {
     "@babel/core": "7.9.0",
@@ -141,7 +142,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "create_electron_express_and_react_app"
+            "name": "my_net"
           }
         },
         {

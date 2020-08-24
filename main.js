@@ -45,7 +45,16 @@ new ExpressApp({}, {
     let mainWindow;
 
     function createWindow () {
-      mainWindow = new BrowserWindow({width: 800, height: 600});
+      mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        titleBarStyle: 'hiddenInset',
+        webPreferences: {
+          nodeIntegration: true,
+          nodeIntegrationInWorker: true,
+          nodeIntegrationInSubFrames: true,
+        },
+      });
     
       mainWindow.loadURL('http://localhost:3001/');
     

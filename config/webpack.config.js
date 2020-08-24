@@ -359,6 +359,16 @@ module.exports = function(webpackEnv) {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
+            // CUSTOM: Adding a worker loader
+            {
+              test: /\.worker\.(c|m)?js$/i,
+              loader: 'worker-loader',
+              options: {
+                inline: 'fallback',
+                esModule: true,
+                // worker: 'SharedWorker',
+              },
+            },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
