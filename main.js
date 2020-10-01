@@ -48,15 +48,20 @@ new ExpressApp({}, {
       mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        titleBarStyle: 'hiddenInset',
+        titleBarStyle: 'hidden',
+        trafficLightPosition: {
+          x: 0,
+          y: -20,
+        },
         webPreferences: {
           nodeIntegration: true,
           nodeIntegrationInWorker: true,
           nodeIntegrationInSubFrames: true,
+          allowRunningInsecureContent: false,
         },
       });
     
-      mainWindow.loadURL('http://localhost:3001/');
+      mainWindow.loadURL('http://localhost:27123/');
     
       mainWindow.webContents.openDevTools();
     

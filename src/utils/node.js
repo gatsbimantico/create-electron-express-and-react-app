@@ -14,19 +14,10 @@ const node = {
     return res;
   },
   get sh() {
-    // if (!node_modules['shelljs']) {
+    if (!node_modules['shelljs']) {
       node_modules['shelljs'] = node.require("shelljs");
-      const fs = node.require("fs");
-      const path = node.require("path");
-      
-      console.log(require('os').homedir())
-      console.log(require('os'))
-      console.log(fs.readdirSync(path.join(require('os').homedir())));
-      // const shelljsrc = JSON.parse(fs.readFileSync("./.shelljsrc", "UTF-8"));
-      // Object.keys(shelljsrc).forEach((confKey) => {
-      //   node_modules['shelljs'].config[confKey] = shelljsrc[confKey];
-      // });
-    // }
+      node_modules['shelljs'].config.execPath = node_modules['shelljs'].env.NODE;
+    }
     return node_modules['shelljs'];
   },
   // run(command) {

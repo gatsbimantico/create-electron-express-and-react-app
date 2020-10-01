@@ -1,5 +1,5 @@
 import React from "react";
-import node from "../utils/node";
+import node from "../../utils/node";
 
 function App() {
   window.shelljs = node.sh;
